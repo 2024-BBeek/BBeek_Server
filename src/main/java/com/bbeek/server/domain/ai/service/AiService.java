@@ -41,9 +41,14 @@ public class AiService {
     public List<String> handleAllergyRequest(String allergy, String product) {
         PromptTemplate promptTemplate = new PromptTemplate(promptSystem + allergyPrompt);
 
-        Prompt prompt = promptTemplate.create(Map.of("all", allergy, "product", product), OpenAiChatOptions.builder().withModel(OpenAiApi.ChatModel.GPT_4_O_MINI).build());
+        Prompt prompt = promptTemplate.create(Map.of("all", allergy, "product", product), OpenAiChatOptions.builder().withModel(OpenAiApi.ChatModel.GPT_4_O).build());
 
-        return List.of(openAiChatModel.call(prompt).getResult().getOutput().getContent().replace(" ", "").split(","));
+        String content = openAiChatModel.call(prompt).getResult().getOutput().getContent().replace(" ", "").replace("없음", "");
+        if (content.isEmpty()) {
+            return List.of();
+        } else {
+            return List.of(content.split(","));
+        }
     }
 
     public List<String> handleMenuRequest(String menu) {
