@@ -24,20 +24,20 @@ public class CommandBarcodeService {
     private final AiService aiService;
     private final AllergyRepository allergyRepository;
 
-    public ItemInfoResponse create(String code, Long userId) {
+    public ItemInfoResponse create(String code) {
 
         //바코드 번호로 물품 정보 가져오기
         ProductDto productDto = productService.barcodeToName(code);
         //조회한거 저장 로직
-        barcodeCreator.create(
-                Barcode.builder()
-                        .code(code)
-                        .userId(userId)
-                        .build()
-        );
+//        barcodeCreator.create(
+//                Barcode.builder()
+//                        .code(code)
+//                        .userId(userId)
+//                        .build()
+//        );
         //AI 답변 요청 로직
-        Allergy allergy = allergyRepository.findByUserId(userId);
-        List<String> checkAllergy = aiService.handleAllergyRequest(allergy.getInfo(), productDto.getMaterials());
+//        Allergy allergy = allergyRepository.findByUserId(userId);
+        List<String> checkAllergy = aiService.handleAllergyRequest("우유", productDto.getMaterials());
         //답변을 ItemInfoResponse 형식으로 맞춰서 반환
         return new ItemInfoResponse(checkAllergy, productDto);
     }

@@ -1,7 +1,12 @@
 package com.bbeek.server.domain.ai.service;
 
-//import com.bbeek.server.domain.user.domain.User;
-//import com.bbeek.server.domain.user.domain.repository.UserRepository;
+import com.bbeek.server.domain.picture.presentation.dto.PictureResponse;
+import com.bbeek.server.domain.allergy.domain.Allergy;
+import com.bbeek.server.domain.allergy.domain.repository.AllergyRepository;
+import com.bbeek.server.domain.halal.domain.Halal;
+import com.bbeek.server.domain.halal.domain.repository.HalalRepository;
+import com.bbeek.server.domain.user.domain.User;
+import com.bbeek.server.domain.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.prompt.Prompt;
@@ -25,8 +30,10 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AiService {
 
-//    private final UserRepository userRepository;
+    private final UserRepository userRepository;
     private final OpenAiChatModel openAiChatModel;
+    private final HalalRepository halalRepository;
+    private final AllergyRepository allergyRepository;
     @Value("${prompt.system}")
     private String promptSystem;
     @Value("${prompt.allergy}")
@@ -69,17 +76,20 @@ public class AiService {
         return openAiChatModel.call(userMessage);
     }
 
-    public List<String> handleNotEatRequest(String menu, String menu1, Long userId) {
+    public PictureResponse handleNotEatRequest(String menu, String menu1, Long userId) {
 
-//        User user = userRepository.findById(userId).orElseThrow();
+        User user = userRepository.findById(userId).orElseThrow();
+        List<Halal> halals = halalRepository.findByUserId(userId);
+        List<Allergy> allergies = allergyRepository.findByUserId(userId);
+
         //TODO user 값 안에서 순서대로 못먹는 알레르기(food), 고기류(meal), 채식(style) 값 뒤에 넣기
 
         PromptTemplate promptTemplate = new PromptTemplate(promptSystem + notEatPrompt);
 
-//        Prompt prompt = promptTemplate.create(Map.of("food", , "meal", , "style" , , "menu", menu, "menu1", menu1, ), OpenAiChatOptions.builder().withModel(OpenAiApi.ChatModel.GPT_4_O_MINI).build());
+        Prompt prompt = promptTemplate.create(Map.of("food", allergies, "meal", halals , "style" , user.getVegetarianType() , "menu", menu, "menu1", menu1), OpenAiChatOptions.builder().withModel(OpenAiApi.ChatModel.GPT_4_O_MINI).build());
 
-//        return List.of(openAiChatModel.call(prompt).getResult().getOutput().getContent().replace(" ", "").split(","));
-        return List.of(openAiChatModel.call((Prompt) null).getResult().getOutput().getContent().replace(" ", "").split(","));
+        return new PictureResponse(List.of(openAiChatModel.call(prompt).getResult().getOutput().getContent().replace(" ", "").split(",")));
+//        return List.of(openAiChatModel.call((Prompt) null).getResult().getOutput().getContent().replace(" ", "").split(","));
 
     }
 
