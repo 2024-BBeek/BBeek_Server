@@ -1,4 +1,4 @@
-package com.bbeek.server.global.product.dto;
+package com.bbeek.server.domain.product.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -112,6 +112,9 @@ public class CalorieResponse {
 
         @JsonProperty("AMT_NUM25")
         private String AMT_NUM25;
+
+        @JsonProperty("AMT_NUM26")
+        private String AMT_NUM26;
 
         @JsonProperty("SUB_REF_CM")
         private String SUB_REF_CM;

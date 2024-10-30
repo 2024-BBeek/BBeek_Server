@@ -1,4 +1,4 @@
-package com.bbeek.server.global.product.dto;
+package com.bbeek.server.domain.product.dto;
 
 import lombok.Data;
 import java.util.List;

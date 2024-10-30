@@ -1,6 +1,6 @@
-package com.bbeek.server.global.product.client;
+package com.bbeek.server.domain.product.client;
 
-import com.bbeek.server.global.product.dto.BarcodeResponse;
+import com.bbeek.server.domain.product.dto.BarcodeResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
