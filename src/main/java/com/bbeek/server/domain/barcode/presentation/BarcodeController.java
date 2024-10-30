@@ -11,10 +11,10 @@ import static com.bbeek.server.global.jwt.util.AuthenticationUtil.getId;
 @RequiredArgsConstructor
 public class BarcodeController {
 
-    private CommandBarcodeService commandBarcodeService;
+    private final CommandBarcodeService commandBarcodeService;
 
     @GetMapping("/barcodes/{code}")
     public ItemInfoResponse createBarcode(@PathVariable String code) {
-        return commandBarcodeService.create(code, getId());
+        return commandBarcodeService.create(code);
     }
 }
