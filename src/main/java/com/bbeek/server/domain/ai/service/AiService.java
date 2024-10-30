@@ -21,7 +21,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -64,12 +66,14 @@ public class AiService {
         Prompt prompt = promptTemplate.create(Map.of("menu", menu), OpenAiChatOptions.builder().withModel(OpenAiApi.ChatModel.GPT_4_O_MINI).build());
 
         return List.of(openAiChatModel.call(prompt).getResult().getOutput().getContent().replace(" ", "").split(","));
+
     }
 
-    public String handlePictureRequest(MultipartFile imageData) throws IOException {
+    public String handlePictureRequest(String img) {
 
-        InputStreamResource imageResource = new InputStreamResource(imageData.getInputStream());
-
+        byte[] decodedImg = Base64.getDecoder().decode(img);
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(decodedImg);
+        InputStreamResource imageResource = new InputStreamResource(inputStream);
         UserMessage userMessage = new UserMessage(promptSystem + picturePrompt,
                 List.of(new Media(MimeTypeUtils.IMAGE_PNG, imageResource)));
 
@@ -82,7 +86,6 @@ public class AiService {
         List<Halal> halals = halalRepository.findByUserId(userId);
         List<Allergy> allergies = allergyRepository.findByUserId(userId);
 
-        //TODO user 값 안에서 순서대로 못먹는 알레르기(food), 고기류(meal), 채식(style) 값 뒤에 넣기
 
         PromptTemplate promptTemplate = new PromptTemplate(promptSystem + notEatPrompt);
 

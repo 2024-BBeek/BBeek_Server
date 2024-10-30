@@ -1,15 +1,18 @@
 package com.bbeek.server.domain.product.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import java.util.List;
 
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class InfoResponse {
     @JsonProperty("C002")
     private C002 c002;
 
     @Data
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class C002 {
         @JsonProperty("total_count")
         private String totalCount;
@@ -22,6 +25,7 @@ public class InfoResponse {
     }
 
     @Data
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Row {
         @JsonProperty("PRDLST_REPORT_NO")
         private String prdlstReportNo;
@@ -49,6 +53,7 @@ public class InfoResponse {
     }
 
     @Data
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Result {
         @JsonProperty("MSG")
         private String msg;

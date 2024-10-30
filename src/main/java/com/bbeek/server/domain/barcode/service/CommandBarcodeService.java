@@ -24,7 +24,7 @@ public class CommandBarcodeService {
     private final AiService aiService;
     private final AllergyRepository allergyRepository;
 
-    public ItemInfoResponse create(String code) {
+    public ItemInfoResponse create(String code, Long userId) {
 
         //바코드 번호로 물품 정보 가져오기
         ProductDto productDto = productService.barcodeToName(code);
@@ -36,8 +36,8 @@ public class CommandBarcodeService {
 //                        .build()
 //        );
         //AI 답변 요청 로직
-//        Allergy allergy = allergyRepository.findByUserId(userId);
-        List<String> checkAllergy = aiService.handleAllergyRequest("우유", productDto.getMaterials());
+        List<Allergy> allergy = allergyRepository.findByUserId(userId);
+        List<String> checkAllergy = aiService.handleAllergyRequest(allergy.toString() , productDto.getMaterials());
         //답변을 ItemInfoResponse 형식으로 맞춰서 반환
         return new ItemInfoResponse(checkAllergy, productDto);
     }

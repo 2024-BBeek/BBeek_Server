@@ -1,5 +1,6 @@
 package com.bbeek.server.domain.product.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import java.util.List;
@@ -10,6 +11,7 @@ public class CalorieResponse {
     private Body body;
 
     @Data
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Header {
         @JsonProperty("resultCode")
         private String resultCode;
@@ -19,6 +21,7 @@ public class CalorieResponse {
     }
 
     @Data
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Body {
         @JsonProperty("pageNo")
         private int pageNo;
@@ -34,6 +37,7 @@ public class CalorieResponse {
     }
 
     @Data
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Item {
         @JsonProperty("NUM")
         private String NUM;
