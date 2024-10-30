@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.openai.OpenAiChatModel;
+import org.springframework.ai.openai.OpenAiChatOptions;
+import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -22,10 +24,9 @@ public class AiService {
     public List<String> handleAllergyRequest(String allergy, String product) {
         PromptTemplate promptTemplate = new PromptTemplate(promptSystem + allergyPrompt);
 
-        Prompt prompt = promptTemplate.create(Map.of("all", allergy, "product", product));
+        Prompt prompt = promptTemplate.create(Map.of("all", allergy, "product", product), OpenAiChatOptions.builder().withModel(OpenAiApi.ChatModel.GPT_4_O_MINI).build());
 
-        List<String> result = List.of(openAiChatModel.call(prompt).getResult().getOutput().getContent().replace(" ", "").split(","));
-        return result;
+        return List.of(openAiChatModel.call(prompt).getResult().getOutput().getContent().replace(" ", "").split(","));
     }
 
 //        public void handleAllergyRequest(MultipartFile imageData) throws IOException {

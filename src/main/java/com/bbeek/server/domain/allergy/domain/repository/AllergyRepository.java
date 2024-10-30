@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AllergyRepository extends JpaRepository<Allergy, Long> {
+    Allergy findByUserId(Long userId);
 }

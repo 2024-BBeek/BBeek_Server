@@ -21,17 +21,14 @@ public class Barcode {
 
     private String code;
 
-    private Boolean isIntaked;
-
     private Long userId;
 
     @CreatedDate
     private LocalDateTime createdAt;
 
     @Builder
-    public Barcode(String code, Boolean isIntaked, Long userId) {
+    public Barcode(String code, Long userId) {
         this.code = code;
-        this.isIntaked = isIntaked;
         this.userId = userId;
     }
 }
