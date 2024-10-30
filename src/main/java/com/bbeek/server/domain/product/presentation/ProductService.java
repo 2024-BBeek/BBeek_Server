@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.CompletableFuture;
+
 
 @Service
 @RequiredArgsConstructor
@@ -49,29 +51,24 @@ public class ProductService {
         BarcodeResponse barcode = barcodeClient.toName(code);
         String name = barcode.getBaseItems().get(0).getValue();
         String img = barcode.getImages().get(0);
-        return nameToCalorieAndInfo(name, img);
+        return nameToCalorieAndInfoAsync(name, img).join();
     }
 
     // 제품 이름으로 제품 칼로리 및 정보 조회
-    private ProductDto nameToCalorieAndInfo(String name, String img) {
-        CalorieResponse calorieResponse = calorieClient.toCalorie(
-                calorieKey,
-                1,
-                1,
-                "json",
-                name
+    private CompletableFuture<ProductDto> nameToCalorieAndInfoAsync(String name, String img) {
+        CompletableFuture<CalorieResponse> calorieFuture = CompletableFuture.supplyAsync(() ->
+                calorieClient.toCalorie(calorieKey, 1, 1, "json", name)
         );
 
-        CalorieResponse.Item item = calorieResponse.getBody().getItems().get(0);
-
-
-        InfoResponse infoResponse = infoClient.toInfo(
-                name
+        CompletableFuture<InfoResponse> infoFuture = CompletableFuture.supplyAsync(() ->
+                infoClient.toInfo(name)
         );
 
-        InfoResponse.Row row = infoResponse.getC002().getRow().get(0); // 원재료 종류
-        return toProductDto(name, img, item, row);
-
+        return calorieFuture.thenCombine(infoFuture, (calorieResponse, infoResponse) -> {
+            CalorieResponse.Item item = calorieResponse.getBody().getItems().get(0);
+            InfoResponse.Row row = infoResponse.getC002().getRow().get(0);
+            return toProductDto(name, img, item, row);
+        });
     }
 
 
