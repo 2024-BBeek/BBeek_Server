@@ -59,7 +59,7 @@ public class JwtUtil {
     }
 
     public ResponseCookie createRefreshCookie(String value){
-        return createCookie("access_normal", value, (int) refreshTokenExpiration);
+        return createCookie("refresh_normal", value, (int) refreshTokenExpiration);
     }
 
     public ResponseCookie invalidCookie(String key){

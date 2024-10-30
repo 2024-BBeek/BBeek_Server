@@ -5,7 +5,7 @@ import com.bbeek.server.domain.barcode.service.CommandBarcodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-//import static com.bbeek.server.global.jwt.util.AuthenticationUtil.getId;
+import static com.bbeek.server.global.jwt.util.AuthenticationUtil.getId;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,6 +15,7 @@ public class BarcodeController {
 
     @GetMapping("/barcodes/{code}")
     public ItemInfoResponse createBarcode(@PathVariable String code) {
-        return commandBarcodeService.create(code);
+//        return commandBarcodeService.create(code, 1L);
+        return commandBarcodeService.create(code, getId());
     }
 }

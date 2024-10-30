@@ -39,6 +39,7 @@ public class SecurityConfig {
     private final RefreshRepository refreshRepository;
     private final ObjectMapper objectMapper;
 
+//    private final List<String> excludedPaths = Arrays.asList("/swagger-ui/**", "/v3/api-docs/**", "/reissue", "/login", "/join", "/barcodes/**", "/picture");
     private final List<String> excludedPaths = Arrays.asList("/swagger-ui/**", "/v3/api-docs/**", "/reissue", "/login", "/join");
 
     @Bean
@@ -61,7 +62,7 @@ public class SecurityConfig {
                         .configurationSource(request -> {
 
                             CorsConfiguration configuration = new CorsConfiguration();
-                            configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+                            configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
 //                            configuration.setAllowedOriginPatterns(Collections.singletonList("*"));
                             configuration.setAllowedMethods(Collections.singletonList("*"));
                             configuration.setAllowCredentials(true);
@@ -90,7 +91,9 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/login","/join", "/reissue","/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .anyRequest().authenticated());
+//                        .requestMatchers("/barcodes/**", "/picture/**").permitAll()
+                        .anyRequest().authenticated()
+                );
 
         http
                 .exceptionHandling(exceptionHandling -> exceptionHandling
@@ -120,5 +123,7 @@ public class SecurityConfig {
 
         return http.build();
     }
+
+
 
 }
