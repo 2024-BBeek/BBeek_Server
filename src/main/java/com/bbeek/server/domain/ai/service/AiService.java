@@ -26,8 +26,7 @@ public class AiService {
 
         Prompt prompt = promptTemplate.create(Map.of("all", allergy, "product", product), OpenAiChatOptions.builder().withModel(OpenAiApi.ChatModel.GPT_4_O_MINI).build());
 
-        List<String> result = List.of(openAiChatModel.call(prompt).getResult().getOutput().getContent().replace(" ", "").split(","));
-        return result;
+        return List.of(openAiChatModel.call(prompt).getResult().getOutput().getContent().replace(" ", "").split(","));
     }
 
 //        public void handleAllergyRequest(MultipartFile imageData) throws IOException {
