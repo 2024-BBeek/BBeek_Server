@@ -11,5 +11,6 @@ public record JoinUserRequest(
         String gender,
         Integer height,
         Integer weight,
-        List<String> allergy
+        List<String> allergy,
+        List<String> halal
 ) {}

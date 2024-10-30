@@ -3,6 +3,8 @@ package com.bbeek.server.domain.auth.service.implementation;
 import com.bbeek.server.domain.allergy.domain.Allergy;
 import com.bbeek.server.domain.allergy.domain.repository.AllergyRepository;
 import com.bbeek.server.domain.auth.presentation.dto.request.JoinUserRequest;
+import com.bbeek.server.domain.halal.domain.Halal;
+import com.bbeek.server.domain.halal.domain.repository.HalalRepository;
 import com.bbeek.server.domain.user.domain.User;
 import com.bbeek.server.domain.user.domain.repository.UserRepository;
 import com.bbeek.server.global.exception.BbeekException;
@@ -19,6 +21,7 @@ public class UserJoiner {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final AllergyRepository allergyRepository;
+    private final HalalRepository halalRepository;
 
 
     @Transactional
@@ -54,6 +57,15 @@ public class UserJoiner {
                         .userId(savedUser.getId())
                         .build();
                 allergyRepository.save(allergy);
+            }
+        }
+        if (joinUserRequest.halal() != null) {
+            for (String halalInfo : joinUserRequest.halal()) {
+                Halal halal = Halal.builder()
+                        .info(halalInfo)
+                        .userId(savedUser.getId())
+                        .build();
+                halalRepository.save(halal);
             }
         }
 
